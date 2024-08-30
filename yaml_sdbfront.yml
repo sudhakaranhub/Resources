@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sdbfront-prd-deploy
+  namespace: sdb
+  labels:
+    app: sdbfront-prd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sdbfront-prd
+  template:
+    metadata:
+      labels:
+        app: sdbfront-prd
+    spec:
+      containers:
+        - name: sdbfront-prd
+          image: aarasysadmin/application:sdbfront.v83
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: dockerhub-cred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sdbfront-prd-svc
+  namespace: sdb
+  labels:
+    app: sdbfront-prd-svc
+spec:
+  selector:
+    app: sdbfront-prd
+  ports:
+    - protocol: TCP
+      port: 8487
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sdbfront-metrics-hpa
+  namespace: sdb
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: sdbfront-prd-deploy
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 50
+

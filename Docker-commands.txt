@@ -1,0 +1,78 @@
+Docker & kubernetes Commands
+
+---------------------------------------------------------------------------------------------------
+For Lms-web
+
+docker build -t aarasysadmin/application:lmsweb.v12 .
+docker push aarasysadmin/application:lmsweb.v12
+kubectl apply -f D:\Production\LMS\lms-web\app\yaml_lmsweb.yml -n lms
+kubectl delete -f D:\Production\LMS\lms-web\app\yaml_lmsweb.yml -n lms
+---------------------------------------------------------------------------------------------------
+For BatchProcess
+
+docker build -t aarasysadmin/application:bacthpro.v7 .
+docker push aarasysadmin/application:bacthpro.v7
+kubectl apply -f D:\Production\LMS\batch\yaml_batchprocess.yml -n lms
+kubectl delete -f D:\Production\LMS\batch\yaml_batchprocess.yml -n lms
+----------------------------------------------------------------------------------------------------
+For STP
+
+docker build -t aarasysadmin/application:stp.v1 .
+docker push aarasysadmin/application:stp.v1
+kubectl apply -f D:\Production\LMS\STP\yaml_stp.yml -n lms
+kubectl delete -f D:\Production\LMS\STP\yaml_stp.yml -n lms
+---------------------------------------------------------------------------------------------------
+For SDBFrontend
+
+docker build -t aarasysadmin/application:sdbfront.v82 .
+docker push aarasysadmin/application:sdbfront.v82
+kubectl apply -f D:\Production\SDB\SDBFrontend\yaml_sdbfront.yml -n sdb
+kubectl delete -f D:\Production\SDB\SDBFrontend\yaml_sdbfront.yml -n sdb
+---------------------------------------------------------------------------------------------------
+For SDBBackend
+
+docker build -t aarasysadmin/application:sdbback.v98 .
+docker push aarasysadmin/application:sdbback.v98
+kubectl apply -f D:\Production\SDB\SDBBackend\yaml_sdbback.yml -n sdb
+kubectl delete -f D:\Production\SDB\SDBBackend\yaml_sdbback.yml -n sdb
+---------------------------------------------------------------------------------------------------
+For SDBBatchprocess
+
+docker build -t aarasysadmin/application:sdbbatch.v15 .
+docker push aarasysadmin/application:sdbbatch.v15
+kubectl apply -f D:\Production\SDB\SDBBatchProcess\yaml_sdbbatch.yml -n sdb
+kubectl delete -f D:\Production\SDB\SDBBatchProcess\yaml_sdbbatch.yml -n sdb
+---------------------------------------------------------------------------------------------------
+For CommonAPI
+
+docker build -t aarasysadmin/application:commonapi.v1 .
+docker push aarasysadmin/application:commonapi.v1
+kubectl apply -f D:\Production\SDB\CommonApi\yaml_commonapi.yml -n sdb
+kubectl delete -f D:\Production\SDB\CommonApi\yaml_commonapi.yml -n sdb
+---------------------------------------------------------------------------------------------------
+For LOSFrontend
+
+docker build -t aarasysadmin/application:losfront.v1 .
+docker push aarasysadmin/application:losfront.v1
+kubectl apply -f D:\Production\LOS\LOS-Web\yaml_losfront.yml -n los
+kubectl delete -f ‪‪D:\Production\LOS\LOS-Web\yaml_losfront.yml -n los
+---------------------------------------------------------------------------------------------------
+For LOSapi
+
+docker build -t aarasysadmin/application:losapi.v1 .
+docker push aarasysadmin/application:losapi.v1
+kubectl apply -f D:\Production\LOS\LOS API\yaml_los-api.yml -n los
+kubectl delete -f D:\Production\LOS\LOS API\yaml_los-api.yml -n los
+---------------------------------------------------------------------------------------------------
+For LOSSTP
+
+docker build -t aarasysadmin/application:losstp.v1 .
+docker push aarasysadmin/application:losstp.v1
+kubectl apply -f D:\Production\LOS\STP\yaml_los-stp.yml -n los
+kubectl delete -f D:\Production\LOS\STP\yaml_los-stp.yml -n los
+
+---------------------------------------------------------------------------------------------------
+
+Deployment restart command
+
+kubectl rollout restart deployment sdbback-prd-deploy -n sdb

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lmsweb-prd-deploy
+  namespace: lms
+  labels:
+    app: lmsweb-prd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lmsweb-prd
+  template:
+    metadata:
+      labels:
+        app: lmsweb-prd
+    spec:
+      containers:
+        - name: lmsweb-prd
+          image: aarasysadmin/application:lmsweb.v10
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: dockerhub-cred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lmsweb-prd-svc
+  namespace: lms
+  labels:
+    app: lmsweb-prd-svc
+spec:
+  selector:
+    app: lmsweb-prd
+  ports:
+    - protocol: TCP
+      port: 8487
+      targetPort: 8080
+  type: ClusterIP

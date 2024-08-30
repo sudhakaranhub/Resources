@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stp-prd-deploy
+  namespace: lms
+  labels:
+    app: stp-prd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stp-prd
+  template:
+    metadata:
+      labels:
+        app: stp-prd
+    spec:
+      containers:
+        - name: stp-prd
+          image: aarasysadmin/application:stp.v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: dockerhub-cred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stp-prd-svc
+  namespace: lms
+  labels:
+    app: stp-prd-svc
+spec:
+  selector:
+    app: stp-prd
+  ports:
+    - protocol: TCP
+      port: 8487
+      targetPort: 8080
+  type: ClusterIP

@@ -1,0 +1,41 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sdb-prd-ingress
+  namespace: sdb
+  annotations:
+    cert-manager.io/cluster-issuer: nginx-letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.allow-http: "false" # disable HTTP
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m" # Maximum allowed file size (20 MB in this case)
+spec:
+  tls:
+  - hosts:
+    - sdb.aaratech.com
+    secretName: sdb-prd-ssl
+  ingressClassName: nginx
+  rules:
+  - host: sdb.aaratech.com
+    http:
+      paths:
+      - path: /SDBFrontend
+        pathType: Prefix
+        backend:
+          service:
+            name: sdbfront-prd-svc
+            port: 
+              number: 8487
+      - path: /SDBBackend
+        pathType: Prefix
+        backend:
+          service:
+            name: sdbback-prd-svc
+            port: 
+              number: 8487
+      - path: /SDBBatchProcess
+        pathType: Prefix
+        backend:
+          service:
+            name: sdbbatch-prd-svc
+            port: 
+              number: 8487

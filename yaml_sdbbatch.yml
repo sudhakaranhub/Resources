@@ -1,0 +1,104 @@
+# pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-sdb-batch
+  namespace: sdb
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /home/sradmin/pv-storage/sdb/
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - at-ch-lnx1
+---
+# pvc.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-sdb-batch
+  namespace: sdb
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 2Gi
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sdbbatch-prd-deploy
+  namespace: sdb
+  labels:
+    app: sdbbatch-prd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sdbbatch-prd
+  template:
+    metadata:
+      labels:
+        app: sdbbatch-prd
+    spec:
+      containers:
+        - name: sdbbatch-prd
+          image: aarasysadmin/application:sdbbatch.v16
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: sdb-storage
+              mountPath: /sdb/
+      imagePullSecrets:
+        - name: dockerhub-cred
+      volumes:
+        - name: sdb-storage
+          persistentVolumeClaim:
+            claimName: pvc-sdb-batch
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sdbbatch-prd-svc
+  namespace: sdb
+  labels:
+    app: sdbbatch-prd-svc
+spec:
+  selector:
+    app: sdbbatch-prd
+  ports:
+    - protocol: TCP
+      port: 8487
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sdbbatch-metrics-hpa
+  namespace: sdb
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: sdbbatch-prd-deploy
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 50

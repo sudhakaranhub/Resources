@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: batchprocess-prd-deploy
+  namespace: lms
+  labels:
+    app: batchprocess-prd
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: batchprocess-prd
+  template:
+    metadata:
+      labels:
+        app: batchprocess-prd
+    spec:
+      containers:
+        - name: batchprocess-prd
+          image: aarasysadmin/application:bacthpro.v2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: dockerhub-cred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: batchprocess-prd-svc
+  namespace: lms
+  labels:
+    app: batchprocess-prd-svc
+spec:
+  selector:
+    app: batchprocess-prd
+  ports:
+    - protocol: TCP
+      port: 8487
+      targetPort: 8080
+  type: ClusterIP

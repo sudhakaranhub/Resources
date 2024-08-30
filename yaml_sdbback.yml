@@ -1,0 +1,115 @@
+
+# local-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-sdb-backend
+  namespace: sdb
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /home/sradmin/pv-storage/sdb/
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - at-ch-lnx1
+---
+# local-pvc.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-sdb-backend
+  namespace: sdb
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sdbback-prd-deploy
+  namespace: sdb
+  labels:
+    app: sdbback-prd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sdbback-prd
+  template:
+    metadata:
+      labels:
+        app: sdbback-prd
+    spec:
+      initContainers:
+        - name: copy-image
+          image: busybox
+          command: ["sh", "-c", "cp /config/aaratech_logo.png /sdb/aaratech_logo.png"]
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+            - name: sdb-storage
+              mountPath: /sdb
+      containers:
+        - name: sdbback-prd
+          image: aarasysadmin/application:sdbback.v98
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: sdb-storage
+              mountPath: /sdb
+      imagePullSecrets:
+        - name: dockerhub-cred
+      volumes:
+        - name: sdb-storage
+          persistentVolumeClaim:
+            claimName: pvc-sdb-backend
+        - name: config-volume
+          configMap:
+            name: sdb-image
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sdbback-prd-svc
+  namespace: sdb
+  labels:
+    app: sdbback-prd-svc
+spec:
+  selector:
+    app: sdbback-prd
+  ports:
+    - protocol: TCP
+      port: 8487
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sdbback-metrics-hpa
+  namespace: sdb
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: sdbback-prd-deploy
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 50

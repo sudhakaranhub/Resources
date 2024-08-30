@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sdb-private-key
+  namespace: sample
+type: Opaque
+data:
+  privateKey.PEM: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpAIBAAKCAQEAkBujGkCPMbtS5Wrz+QIoImA92W4Um3IZgoVkmpP72FUEYsZH
+    sn17pOZmJnFARFD+d/dACu8573eBsWWCkaKxo5NMtqlJZGPQADOZHyh31Um+s603
+    VFoOLBvQcz/tTdIDtRx2wYBwZTPo19RdxODqJrRK5LwPxhY/S/W5810Pr6Hohhtx
+    5vrfE8q0oXCoUS+6TbzizwqVrDxwcKBL6TLgH+SBlKON+SidCNU4x9nt0+YSMtjm
+    KGwup/U0kxnAdrpwxVXRMtuT6LKcfm8LACZrzEk4E9Wy4aNXcgbgHzFkijY6pjgk
+    25ux7HdkcLwVnL1UqZ3FFMROcvcCUQRVP4q6fwIDAQABAoIBAAFy9bHm4km6u3up
+    FqjzV5n448ZS8AwcGpuQYdGYGVk0iaXAnqnxzxN6aZ6LVv0Y32Yva0pw22FID1rM
+    TYLPYv/lFEll7GIBCu9llW2Vx5aydiNyY3MKsMfKw87U3rsAmJ7ymVMayoaJ/hZl
+    gUfghxo6h+JC7dmtEZfe8a67ydOXRkzjNoA8UkidPIXT6dDuzcVjy24cqa163SoX
+    VS+uU9YAW/bXPAEjs/Ictjp8e3Xpd+Kfh6zhPSeDVtN9d/yVnPVemkPrN0rKsfvz
+    iz3sIQzbx7NB1Zj5UvzlQTC9E2q12ROaEc+BQSGbfox6P9V/IAs1xRl6l1dwisoi
+    2R31DvkCgYEA2wTbgCpwHA/furTxKcscTcACnpOkfV0Oz2APULm2aVtZ8lhAQNdD
+    pWZf7f8eP7VN7RHVz4GHcdF3RfdZyz2QowWO5DDW2JAfrMGwNSsL9jFrUtrlroMX
+    9tTtHfklchBLVF90+ZhxbwnP5ej4xyj2Z+Kr3M28gD304SusFTjMNpUCgYEAqHC8
+    GlnwuhsGHaNL92WXnjPFmh6duj6m+BlO1X+zCXsLi0YFvaSIep603lMjz1/ia8tj
+    T/xjwNGje0zGw94HaF2qUjIAYHENZAa80WDOuAmlWb+HL/O/DvM/BJREmmCQeCpY
+    9QrP48O46iWPIX0du0/CAW5ixtBwwO5StpWhy8MCgYEAytL1vvwN9D7TDqFQEEcT
+    AAGHq3jIxHuwImUv6a8B+RFq+520axeugnaK8ejnB1KMRrXUjiTC3KmBTh7hXfC2
+    h/G2wSVlYQoe+yonVyV1H1nmrMUgHHs0bxYCPFak0bu7NvhraFU+/vhUOfKEqFML
+    1Wq5g3JXVV+K7hc2djSyEP0CgYEAnVpLbvaMet8Z9IADTIc8f47vzw1A3ab/xg+m
+    ZK5Z68Zlv2LXpBTbZmlyn6rdbjGtzHOBQEyQR6XP6jSMDpgRJX8yyHxre6zBDKt6
+    osKj+qsQK+pPeQ1kc6vrN/Tmraz96TPuTGQgVy8VRK93qZo/NyfIHhwn7ID2hFVf
+    MbBRKI8CgYARjMKGnYxmFtYiE/fqhVJBb9+NVpjTBxjcCAvFdnIPFL3QqR5zmiUT
+    IG4pV0vaaUWDjpQR18GENLHlnOIFNCmYMX7kAfpBeE5BZ+4gWlFGWHWx1xPcWxY/
+    SfqOhkRzvvPb1UniumhT/EvjSW1Ffiy9T7bLWP3tdlX6CyggcBHB4g==
+    -----END RSA PRIVATE KEY-----
